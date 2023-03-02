@@ -97,6 +97,7 @@ void loop() {
         // TODO
         // iterate for column 1 with fastLED.h stuff; for loop
         // at 9th or 10th row in for loop, do a button check and then score stuff
+        // note: if the for loop takes more than 500ms, the code won't work because the smallest time difference in the time arrays is 500ms
 
         // debugging
         Serial.println("NEXT");
