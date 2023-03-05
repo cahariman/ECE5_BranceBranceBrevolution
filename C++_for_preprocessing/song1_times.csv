@@ -1,7 +1,11 @@
 
-long long song1_key1_times[] = {-1, 5549};
-long long song1_key2_times[] = {-1, 2163, 3620, 5212};
-long long song3_key1_times[] = {-1, 4891};
-long long song1_key4_times[] = {-1, 2939, 4259};
+long long song1_key1_times[] = {-1, 1179, 4278};
+long long song1_key2_times[] = {-1, 1901};
+long long song1_key3_times[] = {-1, 2133, 3558};
+long long song1_key4_times[] = {-1, 2630};
+int w = 1;
+int a = 1;
+int s = 1;
+int d = 1;
 Hello
 1 2 3
