@@ -1,8 +1,8 @@
 
-long long song1_key1_times[] = {-1, 1179, 4278};
-long long song1_key2_times[] = {-1, 1901};
-long long song1_key3_times[] = {-1, 2133, 3558};
-long long song1_key4_times[] = {-1, 2630};
+long song1_key1_times[] = {-1, 1175, 5741};
+long song1_key2_times[] = {-1, 1974, 4366, 5327};
+long song1_key3_times[] = {-1, 2790, 3134, 3967, 5133};
+long song1_key4_times[] = {-1, 2958, 3302};
 int w = 1;
 int a = 1;
 int s = 1;

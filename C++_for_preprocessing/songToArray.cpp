@@ -23,10 +23,10 @@ int main() {
     // play song
 
     high_resolution_clock::time_point song_start_time = high_resolution_clock::now();
-    vector<long long> song1_key1_times(1, -1);
-    vector<long long> song1_key2_times(1, -1);
-    vector<long long> song1_key3_times(1, -1);
-    vector<long long> song1_key4_times(1, -1);
+    vector<unsigned long> song1_key1_times(1, -1);
+    vector<unsigned long> song1_key2_times(1, -1);
+    vector<unsigned long> song1_key3_times(1, -1);
+    vector<unsigned long> song1_key4_times(1, -1);
 
 
     // while the song is playing, see when certain keys are pressed and record the time at which they are pressed into an array
@@ -96,25 +96,25 @@ int main() {
 
     // Write to file
     outFS << endl;
-    outFS << "long long song1_key1_times[] = {";
+    outFS << "unsigned long song1_key1_times[] = {";
     for (int i = 0; i < song1_key1_times.size() - 1; i++) {
         outFS << song1_key1_times.at(i) << ", ";
     }
     outFS << song1_key1_times.at(song1_key1_times.size() - 1) << "};" << endl;
 
-    outFS << "long long song1_key2_times[] = {";
+    outFS << "unsigned long song1_key2_times[] = {";
     for (int i = 0; i < song1_key2_times.size() - 1; i++) {
         outFS << song1_key2_times.at(i) << ", ";
     }
     outFS << song1_key2_times.at(song1_key2_times.size() - 1) << "};" << endl;
 
-    outFS << "long long song1_key3_times[] = {";
+    outFS << "unsigned long song1_key3_times[] = {";
     for (int i = 0; i < song1_key3_times.size() - 1; i++) {
         outFS << song1_key3_times.at(i) << ", ";
     }
     outFS << song1_key3_times.at(song1_key3_times.size() - 1) << "};" << endl;
 
-    outFS << "long long song1_key4_times[] = {";
+    outFS << "unsigned long song1_key4_times[] = {";
     for (int i = 0; i < song1_key4_times.size() - 1; i++) {
         outFS << song1_key4_times.at(i) << ", ";
     }
