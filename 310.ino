@@ -1,10 +1,11 @@
 #include <FastLED.h>
+#include <LiquidCrystal.h>
 #define NUM_LEDS 110
-#define DATA_PIN 4
-#define BUTTON1_PIN 5
-#define BUTTON2_PIN 6
-#define BUTTON3_PIN 7
-#define BUTTON4_PIN 8
+#define DATA_PIN 2
+#define BUTTON1_PIN 3
+#define BUTTON2_PIN 4
+#define BUTTON3_PIN 5
+#define BUTTON4_PIN 6
 
 // led stuff
 CRGB leds[NUM_LEDS];
@@ -52,6 +53,10 @@ bool canScorePoint_column4 = false;
 unsigned long canScorePoint_column1_duration, canScorePoint_column2_duration, canScorePoint_column3_duration, canScorePoint_column4_duration;
 int score = 0;
 
+const int RSpin = 8;
+const int ENpin = 9;
+const int d4 = 10, d5 = 11, d6 = 12, d7 = 13;
+LiquidCrystal lcd(RSpin, ENpin, d4, d5, d6, d7);
 
 // function that will update time that light should turn on for next light using the next element of the arrays
 // these functions endup accessing out of array bounds, I think i can fix that by including the size of the array in the first element in the future
@@ -97,7 +102,7 @@ void startColumnIteration(int column, bool &columnInProgressFlag, int beginningI
     // Serial.println("column start");
 }
 
-void ColumnIteration(bool &columnInProgressFlag, bool scoreFlag, unsigned long scoreDuration, int beginningIndex, unsigned long &columnTime, unsigned long next_light, int &iterator) {
+void ColumnIteration(bool &columnInProgressFlag, bool &scoreFlag, unsigned long &scoreDuration, int beginningIndex, unsigned long &columnTime, unsigned long next_light, int &iterator) {
     if (iterator < (beginningIndex + 9)) {
             leds[iterator - 1] = CRGB::Black; FastLED.show(); 
             leds[iterator] = CRGB::MediumVioletRed; FastLED.show(); 
@@ -111,7 +116,7 @@ void ColumnIteration(bool &columnInProgressFlag, bool scoreFlag, unsigned long s
             leds[iterator + 9] = CRGB::BlanchedAlmond; FastLED.show(); 
             columnTime = next_light;
             columnInProgressFlag = false;
-            Serial.println("column done");
+            //Serial.println("column done");
         }
         if (iterator == (beginningIndex + 8)) {
             scoreFlag = true;
@@ -122,13 +127,13 @@ void ColumnIteration(bool &columnInProgressFlag, bool scoreFlag, unsigned long s
 // function for debugging
 void Print_Next_Times() {
     Serial.print("next_light_1: ");
-    Serial.println(next_light_1);
+    //Serial.println(next_light_1);
     Serial.print("next_light_2: ");
-    Serial.println(next_light_2);
+    //Serial.println(next_light_2);
     Serial.print("next_light_3: ");
-    Serial.println(next_light_3);
+    //Serial.println(next_light_3);
     Serial.print("next_light_4: ");
-    Serial.println(next_light_4);
+    //Serial.println(next_light_4);
 }
 
 void setup() { 
@@ -159,11 +164,14 @@ void setup() {
     Serial.begin(9600);
     Print_Next_Times();
 
-    //
+    //Initializing button input
     pinMode(BUTTON1_PIN, INPUT);
     pinMode(BUTTON2_PIN, INPUT);
     pinMode(BUTTON3_PIN, INPUT);
     pinMode(BUTTON4_PIN, INPUT);
+
+    //LCD
+    lcd.begin(16,2);    
 
     leds[column1_index + 8] = CRGB::BlanchedAlmond; FastLED.show();
     leds[column1_index + 18] = CRGB::BlanchedAlmond; FastLED.show();
@@ -179,8 +187,13 @@ void setup() {
 // event based programming !
 void loop() {
 
+  int button1 = digitalRead(BUTTON1_PIN); 
+  int button2 = digitalRead(BUTTON2_PIN);
+  int button3 = digitalRead(BUTTON3_PIN);
+  int button4 = digitalRead(BUTTON4_PIN);
     // check if it is time to prompt for the first button
     if ( millis() > next_light_1 ) {
+      
         if (column1InProgress1 == false) {
             startColumnIteration(1, column1InProgress1, column1_index, next_column_1, next_light_1, i);
         }
@@ -199,11 +212,15 @@ void loop() {
     }
     if ( (millis() > next_column_1_3) && (column1InProgress3 == true) ) {
         ColumnIteration(column1InProgress3, canScorePoint_column1, canScorePoint_column1_duration, column1_index, next_column_1_3, next_light_1, i_3);
-    }
+    }   
     if ( millis() < canScorePoint_column1_duration) {
-        if (canScorePoint_column1 == true) {
-            canScorePoint_column1 = false;
+      int button1 = digitalRead(BUTTON1_PIN)
+        if (canScorePoint_column1 == true && button1 == HIGH) {
             score++;
+            lcd.setCursor(0, 1);
+            lcd.print(score);
+            Serial.print("score updated");
+            canScorePoint_column1 = false;
         }
     }
 
@@ -227,6 +244,14 @@ void loop() {
     if ( (millis() > next_column_2_3) && (column2InProgress3 == true) ) {
         ColumnIteration(column2InProgress3, canScorePoint_column2, canScorePoint_column2_duration, column2_index, next_column_2_3, next_light_2, j_3);
     }
+    if ( millis() < canScorePoint_column2_duration) {
+        if (canScorePoint_column2 == true && button2 == HIGH) {
+            canScorePoint_column2 = false;
+            score++;
+            lcd.setCursor(0, 1);
+            lcd.print(score);
+        }
+    }
     
     if ( millis() > next_light_3 ) {
         if (column3InProgress1 == false) {
@@ -247,6 +272,14 @@ void loop() {
     }
     if ( (millis() > next_column_3_3) && (column3InProgress3 == true) ) {
         ColumnIteration(column3InProgress3, canScorePoint_column3, canScorePoint_column3_duration, column3_index, next_column_3_3, next_light_3, k_3);
+    }
+    if ( millis() < canScorePoint_column3_duration) {
+        if (canScorePoint_column3 == true && button3 == HIGH) {
+            canScorePoint_column3 = false;
+            score++;
+            lcd.setCursor(0, 1);
+            lcd.print(score);
+        }
     }
 
     if ( millis() > next_light_4 ) {
@@ -270,4 +303,15 @@ void loop() {
     if ( (millis() > next_column_4_3) && (column4InProgress3 == true) ) {
         ColumnIteration(column4InProgress3, canScorePoint_column4, canScorePoint_column4_duration, column4_index, next_column_4_3, next_light_4, l_3);
     }
+    if ( millis() < canScorePoint_column4_duration) {
+        if (canScorePoint_column4 == true && button4 == HIGH) {
+            canScorePoint_column4 = false;
+            score++;
+            lcd.setCursor(0, 1);
+            lcd.print(score);
+            Serial.println("Score added to");
+        }
+    }
+  lcd.setCursor(0,1);
+  lcd.print(score); 
 }
