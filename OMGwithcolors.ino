@@ -93,8 +93,24 @@ void updateColumn(unsigned long &column) {
 
 void startColumnIteration(int column, bool &columnInProgressFlag, int beginningIndex, unsigned long &columnTime, unsigned long next_light, int &iterator) {
     columnInProgressFlag = true;
-    leds[beginningIndex - 1] = CRGB::MediumVioletRed; FastLED.show();
-    leds[beginningIndex + 9] = CRGB::MediumVioletRed; FastLED.show();
+    switch (column) {
+      case 1:
+      leds[beginningIndex - 1] = CRGB::DarkRed; FastLED.show();
+      leds[beginningIndex + 9] = CRGB::DarkRed; FastLED.show();
+        break;
+      case 2:
+        leds[beginningIndex - 1] = CRGB::Yellow; FastLED.show();
+        leds[beginningIndex + 9] = CRGB::Yellow; FastLED.show();
+        break;
+      case 3:
+        leds[beginningIndex - 1] = CRGB::DarkGreen; FastLED.show();
+        leds[beginningIndex + 9] = CRGB::DarkGreen; FastLED.show();
+        break;
+      case 4:
+        leds[beginningIndex - 1] = CRGB::DodgerBlue; FastLED.show();
+        leds[beginningIndex + 9] = CRGB::DodgerBlue; FastLED.show();
+        break;
+    }
     columnTime  = next_light + LED_delay; 
     iterator = beginningIndex;
     getNextTime(column);
@@ -102,14 +118,36 @@ void startColumnIteration(int column, bool &columnInProgressFlag, int beginningI
     // Serial.println("column start");
 }
 
-void ColumnIteration(bool &columnInProgressFlag, bool &scoreFlag, unsigned long &scoreDuration, int beginningIndex, unsigned long &columnTime, unsigned long next_light, int &iterator) {
+void ColumnIteration(int column, bool &columnInProgressFlag, bool &scoreFlag, unsigned long &scoreDuration, int beginningIndex, unsigned long &columnTime, unsigned long next_light, int &iterator) {
     if (iterator < (beginningIndex + 9)) {
-            leds[iterator - 1] = CRGB::Black; FastLED.show(); 
-            leds[iterator] = CRGB::MediumVioletRed; FastLED.show(); 
-            leds[iterator + 9] = CRGB::Black; FastLED.show(); 
-            leds[iterator + 10] = CRGB::MediumVioletRed; FastLED.show(); 
-            iterator++;
-            updateColumn(columnTime);
+      switch (column) {
+        case 1:
+          leds[iterator - 1] = CRGB::Black; FastLED.show(); 
+          leds[iterator] = CRGB::DarkRed; FastLED.show(); 
+          leds[iterator + 9] = CRGB::Black; FastLED.show(); 
+          leds[iterator + 10] = CRGB::DarkRed; FastLED.show(); 
+          break;
+        case 2:
+          leds[iterator - 1] = CRGB::Black; FastLED.show(); 
+          leds[iterator] = CRGB::Yellow; FastLED.show(); 
+          leds[iterator + 9] = CRGB::Black; FastLED.show(); 
+          leds[iterator + 10] = CRGB::Yellow; FastLED.show(); 
+          break;
+        case 3:
+          leds[iterator - 1] = CRGB::Black; FastLED.show(); 
+          leds[iterator] = CRGB::DarkGreen; FastLED.show(); 
+          leds[iterator + 9] = CRGB::Black; FastLED.show(); 
+          leds[iterator + 10] = CRGB::DarkGreen; FastLED.show(); 
+          break;
+        case 4:
+          leds[iterator - 1] = CRGB::Black; FastLED.show(); 
+          leds[iterator] = CRGB::DodgerBlue; FastLED.show(); 
+          leds[iterator + 9] = CRGB::Black; FastLED.show(); 
+          leds[iterator + 10] = CRGB::DodgerBlue; FastLED.show(); 
+          break;
+    }
+        iterator++;
+        updateColumn(columnTime);
         }
         else {
             leds[iterator - 1] = CRGB::BlanchedAlmond; FastLED.show(); 
@@ -205,13 +243,13 @@ void loop() {
         }
     }
     if ( (millis() > next_column_1) && (column1InProgress1 == true) ) {
-        ColumnIteration(column1InProgress1, canScorePoint_column1, canScorePoint_column1_duration, column1_index, next_column_1, next_light_1, i);
+        ColumnIteration(1, column1InProgress1, canScorePoint_column1, canScorePoint_column1_duration, column1_index, next_column_1, next_light_1, i);
     }
     if ( (millis() > next_column_1_2) && (column1InProgress2 == true) ) {
-        ColumnIteration(column1InProgress2, canScorePoint_column1, canScorePoint_column1_duration, column1_index, next_column_1_2, next_light_1, i_2);
+        ColumnIteration(1, column1InProgress2, canScorePoint_column1, canScorePoint_column1_duration, column1_index, next_column_1_2, next_light_1, i_2);
     }
     if ( (millis() > next_column_1_3) && (column1InProgress3 == true) ) {
-        ColumnIteration(column1InProgress3, canScorePoint_column1, canScorePoint_column1_duration, column1_index, next_column_1_3, next_light_1, i_3);
+        ColumnIteration(1, column1InProgress3, canScorePoint_column1, canScorePoint_column1_duration, column1_index, next_column_1_3, next_light_1, i_3);
     }   
     if ( millis() < canScorePoint_column1_duration) {
       int button1 = digitalRead(BUTTON1_PIN);
@@ -236,13 +274,13 @@ void loop() {
         }
     }
     if ( (millis() > next_column_2) && (column2InProgress1 == true) ) {
-        ColumnIteration(column2InProgress1, canScorePoint_column2, canScorePoint_column2_duration, column2_index, next_column_2, next_light_2, j);
+        ColumnIteration(2, column2InProgress1, canScorePoint_column2, canScorePoint_column2_duration, column2_index, next_column_2, next_light_2, j);
     }
     if ( (millis() > next_column_2_2) && (column2InProgress2 == true) ) {
-        ColumnIteration(column2InProgress2, canScorePoint_column2, canScorePoint_column2_duration, column2_index, next_column_2_2, next_light_2, j_2);
+        ColumnIteration(2, column2InProgress2, canScorePoint_column2, canScorePoint_column2_duration, column2_index, next_column_2_2, next_light_2, j_2);
     }
     if ( (millis() > next_column_2_3) && (column2InProgress3 == true) ) {
-        ColumnIteration(column2InProgress3, canScorePoint_column2, canScorePoint_column2_duration, column2_index, next_column_2_3, next_light_2, j_3);
+        ColumnIteration(2, column2InProgress3, canScorePoint_column2, canScorePoint_column2_duration, column2_index, next_column_2_3, next_light_2, j_3);
     }
     if ( millis() < canScorePoint_column2_duration) {
         if (canScorePoint_column2 == true && button2 == HIGH) {
@@ -265,13 +303,13 @@ void loop() {
         }
     }
     if ( (millis() > next_column_3) && (column3InProgress1 == true) ) {
-        ColumnIteration(column3InProgress1, canScorePoint_column3, canScorePoint_column3_duration, column3_index, next_column_3, next_light_3, k);
+        ColumnIteration(3, column3InProgress1, canScorePoint_column3, canScorePoint_column3_duration, column3_index, next_column_3, next_light_3, k);
     }
     if ( (millis() > next_column_3_2) && (column3InProgress2 == true) ) {
-        ColumnIteration(column3InProgress2, canScorePoint_column3, canScorePoint_column3_duration, column3_index, next_column_3_2, next_light_3, k_2);
+        ColumnIteration(3, column3InProgress2, canScorePoint_column3, canScorePoint_column3_duration, column3_index, next_column_3_2, next_light_3, k_2);
     }
     if ( (millis() > next_column_3_3) && (column3InProgress3 == true) ) {
-        ColumnIteration(column3InProgress3, canScorePoint_column3, canScorePoint_column3_duration, column3_index, next_column_3_3, next_light_3, k_3);
+        ColumnIteration(3, column3InProgress3, canScorePoint_column3, canScorePoint_column3_duration, column3_index, next_column_3_3, next_light_3, k_3);
     }
     if ( millis() < canScorePoint_column3_duration) {
         if (canScorePoint_column3 == true && button3 == HIGH) {
@@ -295,13 +333,13 @@ void loop() {
         }
     }
     if ( (millis() > next_column_4) && (column4InProgress1 == true) ) {
-        ColumnIteration(column4InProgress1, canScorePoint_column4, canScorePoint_column4_duration, column4_index, next_column_4, next_light_4, l);
+        ColumnIteration(4, column4InProgress1, canScorePoint_column4, canScorePoint_column4_duration, column4_index, next_column_4, next_light_4, l);
     }
     if ( (millis() > next_column_4_2) && (column4InProgress2 == true) ) {
-        ColumnIteration(column4InProgress2, canScorePoint_column4, canScorePoint_column4_duration, column4_index, next_column_4_2, next_light_4, l_2);
+        ColumnIteration(4, column4InProgress2, canScorePoint_column4, canScorePoint_column4_duration, column4_index, next_column_4_2, next_light_4, l_2);
     }
     if ( (millis() > next_column_4_3) && (column4InProgress3 == true) ) {
-        ColumnIteration(column4InProgress3, canScorePoint_column4, canScorePoint_column4_duration, column4_index, next_column_4_3, next_light_4, l_3);
+        ColumnIteration(4, column4InProgress3, canScorePoint_column4, canScorePoint_column4_duration, column4_index, next_column_4_3, next_light_4, l_3);
     }
     if ( millis() < canScorePoint_column4_duration) {
         if (canScorePoint_column4 == true && button4 == HIGH) {
